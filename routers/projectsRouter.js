@@ -14,7 +14,7 @@ router.get("/", (req,res) => {
     })
 })
 
-router.post("/", (req,res) => {
+router.post("/", validateProject, (req,res) => {
     console.log(req.body)
     insert(req.body)
     .then(res.status(200).json(req.body))
@@ -48,5 +48,13 @@ router.get("/:id/actions", (req,res) => {
         console.log(err)
     })
 })
+
+function validateProject(req,res,next) {
+    if(req.body.name == undefined || req.body.description == undefined){
+        res.status(400).json({message: "request must have all requirements in body (name and description)"})
+    } else {
+        next()
+    }
+}
 
 module.exports = router; 
